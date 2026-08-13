@@ -1,7 +1,9 @@
-from fastapi import FastAPI
-from fastapi.exceptions import HTTPException
 import uvicorn
-from class_calculator import Calculator
+from fastapi import FastAPI
+from fastapi import Form
+from fastapi.exceptions import HTTPException
+
+from calculator import Calculator
 
 app = FastAPI(title="Stub FastAPI App")
 
@@ -11,7 +13,7 @@ async def read_root():
     return {"status": "ok"}
 
 @app.post("/calculations")
-async def calculate(firstNumber: float, secondNumber: float, operation: str) -> float:
+async def calculate(firstNumber: float = Form(), secondNumber: float = Form(), operation: str = Form()) -> float:
     calculator = Calculator()
     operation = operation.strip()
     if operation == "+":

@@ -1,0 +1,53 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="PyPackageRequirementsInspection" enabled="false" level="WARNING" enabled_by_default="false">
+      <option name="ignoredPackages">
+        <list>
+          <option value="beautifulsoup4" />
+          <option value="charset-normalizer" />
+          <option value="Cython" />
+          <option value="dedoc-utils" />
+          <option value="fastapi" />
+          <option value="fontTools" />
+          <option value="huggingface-hub" />
+          <option value="imutils" />
+          <option value="itsdangerous" />
+          <option value="levenshtein" />
+          <option value="numpy" />
+          <option value="olefile" />
+          <option value="opencv-python" />
+          <option value="orjson" />
+          <option value="pandas" />
+          <option value="pdf.tocgen" />
+          <option value="pdf2image" />
+          <option value="pdfminer.six" />
+          <option value="piexif" />
+          <option value="puremagic" />
+          <option value="py7zr" />
+          <option value="pypdf" />
+          <option value="pytesseract" />
+          <option value="python-docx" />
+          <option value="python-logstash-async" />
+          <option value="python-magic" />
+          <option value="python-multipart" />
+          <option value="rarfile" />
+          <option value="requests" />
+          <option value="roman" />
+          <option value="scikit-image" />
+          <option value="scikit_learn" />
+          <option value="scipy" />
+          <option value="six" />
+          <option value="starlette" />
+          <option value="texttable" />
+          <option value="ujson" />
+          <option value="uvicorn" />
+          <option value="wget" />
+          <option value="xgbfir" />
+          <option value="xgboost" />
+          <option value="xlrd" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>

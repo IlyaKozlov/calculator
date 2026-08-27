@@ -43,21 +43,21 @@ def test_post_commutative(client: TestClient, operation:str):
             reverse_response = post_calculation(client,k,n, operation)
             assert response.json() == reverse_response.json()
 
-def post_calculation(client: TestClient, firstNumber: float, secondNumber:float, operation:str):
-    response = client.post("/calculations", data={"firstNumber": firstNumber, "secondNumber": secondNumber, "operation": operation})
+def post_calculation(client: TestClient, first_number: float, second_number:float, operation:str):
+    response = client.post("/calculations", data={"firstNumber": first_number, "secondNumber": second_number, "operation": operation})
     assert response.raise_for_status()
     return response
 
 
 @pytest.mark.parametrize(
-    ("firstNumber", "operation", "secondNumber", "expected",),
+    ("first_number", "operation", "second_number", "expected",),
     [
         (-2,"+", -4, -6),
         (-3,"-", -4, 1)
     ]
 )
-def test_post_negative_calculation(client, operation, firstNumber:float, secondNumber:float, expected:float):
-   response = post_calculation(client = client, firstNumber = firstNumber, operation = operation, secondNumber = secondNumber)
+def test_post_negative_calculation(client, operation, first_number:float, second_number:float, expected:float):
+   response = post_calculation(client = client, first_number = first_number, operation = operation, second_number = second_number)
    assert response.json() == expected
 
 

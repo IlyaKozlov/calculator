@@ -2,8 +2,10 @@ import json
 from pathlib import Path
 from time import time
 
+from db.abstract_db import AbstractDb
 
-class HistoryDb:
+
+class HistoryDb(AbstractDb):
 
     _path = Path(__file__).parent / "History.db"
 
@@ -14,4 +16,12 @@ class HistoryDb:
                     "second_number": second_number,
                     "timestamp": time()
                     }
+            print(f"add new operation to db, {item}")
             db.write(json.dumps(item) + "\n")
+
+    def history_load(self) -> list[dict]:
+        if  not self._path.exists():
+            return []
+        with open(self._path, "r") as db:
+            return [json.loads(line) for line in db]
+

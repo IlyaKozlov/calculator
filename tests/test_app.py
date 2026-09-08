@@ -1,3 +1,5 @@
+import random
+
 import pytest
 from fastapi.testclient import TestClient
 from app import app
@@ -65,3 +67,26 @@ def test_post_zero_division(client: TestClient):
     response = client.post("/calculations", data={"firstNumber": 5, "secondNumber": 0, "operation": "/"})
     assert response.status_code == 400
     assert response.json() == {'detail': 'Second number cannot be zero'}
+
+def test_history(client: TestClient):
+    first_number = random.uniform(10, 10000)
+    second_number = random.uniform(10, 10000)
+    operation = random.choice(["+", "-", "*", "/"])
+    response = client.get("/history")
+    assert response.status_code == 200
+    history_old = response.json()
+    for item in history_old:
+        assert not (
+            first_number == item["first_number"] and
+            second_number == item["second_number"] and
+            operation == item["operation"]
+        )
+    post_calculation(client, first_number, second_number, operation)
+    response = client.get("/history")
+    assert response.status_code == 200
+    history_new = response.json()
+    assert any(
+        first_number == item["first_number"] and
+        second_number == item["second_number"] and
+        operation == item["operation"] for item in history_new
+    )

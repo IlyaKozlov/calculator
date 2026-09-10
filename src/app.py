@@ -4,6 +4,8 @@ from fastapi import Form
 from fastapi.exceptions import HTTPException
 
 from calculator import Calculator
+from db.db_factory import get_db
+from db.history_db import HistoryDb
 
 app = FastAPI(title="Stub FastAPI App")
 
@@ -14,6 +16,9 @@ async def read_root():
 
 @app.post("/calculations")
 async def calculate(firstNumber: float = Form(), secondNumber: float = Form(), operation: str = Form()) -> float:
+    db = get_db()
+    db.history_save(first_number = firstNumber, operation = operation, second_number = secondNumber)
+
     calculator = Calculator()
     operation = operation.strip()
     if operation == "+":
@@ -28,6 +33,11 @@ async def calculate(firstNumber: float = Form(), secondNumber: float = Form(), o
         except ValueError as e:
             raise HTTPException(status_code=400, detail=str(e))
     raise HTTPException(status_code=400, detail=f"Invalid operation {operation}")
+
+@app.get("/history")
+def get_history() -> list[dict]:
+    db = get_db()
+    return db.history_load()
 
 
 if __name__ == "__main__":

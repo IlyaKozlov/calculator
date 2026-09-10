@@ -1,4 +1,4 @@
-import json
+
 from pathlib import Path
 from time import time
 import sqlite3
@@ -14,6 +14,8 @@ class HistoryDb(AbstractDb):
         self._create_table()
 
     def _get_connection(self):
+        print(f"DB PATH: {self._path}")
+        print(f"DB EXISTS: {self._path.exists()}")
         return sqlite3.connect(self._path)
 
     def _create_table(self):

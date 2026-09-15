@@ -5,7 +5,6 @@ from fastapi.exceptions import HTTPException
 
 from calculator import Calculator
 from db.db_factory import get_db
-from db.history_db import HistoryDb
 
 app = FastAPI(title="Stub FastAPI App")
 

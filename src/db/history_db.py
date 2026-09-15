@@ -1,13 +1,11 @@
-
+import sqlite3
 from pathlib import Path
 from time import time
-import sqlite3
 
 from db.abstract_db import AbstractDb
 
 
 class HistoryDb(AbstractDb):
-
     _path = Path(__file__).parent / "History.db"
 
     def __init__(self):
@@ -22,7 +20,8 @@ class HistoryDb(AbstractDb):
         connection = self._get_connection()
         cursor = connection.cursor()
 
-        cursor.execute("""
+        cursor.execute(
+            """
                 CREATE TABLE IF NOT EXISTS calculations (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     first_number REAL NOT NULL,
@@ -30,7 +29,8 @@ class HistoryDb(AbstractDb):
                     second_number REAL NOT NULL,
                     timestamp REAL NOT NULL
                 )
-            """)
+            """
+        )
 
         connection.commit()
         connection.close()
@@ -44,7 +44,7 @@ class HistoryDb(AbstractDb):
             INSERT INTO calculations (first_number, operation, second_number, timestamp)
             VALUES (?, ?, ?, ?)
             """,
-            (first_number, operation, second_number, time())
+            (first_number, operation, second_number, time()),
         )
 
         connection.commit()
@@ -54,11 +54,13 @@ class HistoryDb(AbstractDb):
         connection = self._get_connection()
         cursor = connection.cursor()
 
-        cursor.execute("""
+        cursor.execute(
+            """
                 SELECT first_number, operation, second_number, timestamp
                 FROM calculations
                 ORDER BY id
-            """)
+            """
+        )
 
         rows = cursor.fetchall()
         connection.close()
@@ -68,7 +70,7 @@ class HistoryDb(AbstractDb):
                 "first_number": row[0],
                 "operation": row[1],
                 "second_number": row[2],
-                "timestamp": row[3]
+                "timestamp": row[3],
             }
             for row in rows
         ]

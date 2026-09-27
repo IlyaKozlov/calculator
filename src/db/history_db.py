@@ -50,17 +50,22 @@ class HistoryDb(AbstractDb):
         connection.commit()
         connection.close()
 
-    def history_load(self) -> list[dict]:
+    def history_load(self, operation: str | None = None) -> list[dict]:
         connection = self._get_connection()
         cursor = connection.cursor()
-
-        cursor.execute(
-            """
-                SELECT first_number, operation, second_number, timestamp
-                FROM calculations
-                ORDER BY id
-            """
-        )
+        if operation is None:
+            cursor.execute("""
+                           SELECT first_number, operation, second_number, timestamp
+                           FROM calculations
+                           ORDER BY id
+                           """)
+        else:
+            cursor.execute("""
+                           SELECT first_number, operation, second_number, timestamp
+                           FROM calculations
+                           WHERE operation = ?
+                           ORDER BY id
+                           """, (operation,))
 
         rows = cursor.fetchall()
         connection.close()
@@ -70,7 +75,7 @@ class HistoryDb(AbstractDb):
                 "first_number": row[0],
                 "operation": row[1],
                 "second_number": row[2],
-                "timestamp": row[3],
+                "timestamp": row[3]
             }
             for row in rows
         ]

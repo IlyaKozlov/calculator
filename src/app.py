@@ -39,9 +39,9 @@ async def calculate(
 
 
 @app.get("/history")
-def get_history() -> list[dict]:
+def get_history(operation: str | None = None) -> list[dict]:
     db = get_db()
-    return db.history_load()
+    return db.history_load(operation=operation)
 
 
 if __name__ == "__main__":

@@ -7,5 +7,5 @@ class AbstractDb(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def history_load(self) -> list[dict]:
+    def history_load(self, operation: str | None = None) -> list[dict]:
         raise NotImplementedError

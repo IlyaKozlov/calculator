@@ -1,16 +1,22 @@
+from pathlib import Path
+
 import uvicorn
 from fastapi import FastAPI, Form
 from fastapi.exceptions import HTTPException
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 
 from calculator import Calculator
 from db.db_factory import get_db
 
-app = FastAPI(title="Stub FastAPI App")
+app = FastAPI(title="Калькулятор")
+BASE_DIR = Path(__file__).resolve().parent
+app.mount("/static", StaticFiles(directory=BASE_DIR / "static"), name="static")
 
 
-@app.get("/")
+@app.get("/", response_class=FileResponse)
 async def read_root():
-    return {"status": "ok"}
+    return FileResponse(BASE_DIR / "templates" / "index.html")
 
 
 @app.post("/calculations")
@@ -42,6 +48,10 @@ async def calculate(
 def get_history(operation: str | None = None) -> list[dict]:
     db = get_db()
     return db.history_load(operation=operation)
+
+@app.get("/favicon.ico")
+def get_icon() -> FileResponse:
+    return FileResponse(BASE_DIR / "static" / "favicon.ico")
 
 
 if __name__ == "__main__":

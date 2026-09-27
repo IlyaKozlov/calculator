@@ -1,0 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+  color-scheme: dark;
+  font-family: 'DM Sans', Arial, sans-serif;
+  background: #10131b;
+  color: #f5f7fb;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: radial-gradient(circle at 50% 0%, #262d45 0, #10131b 52%);
+}
+
+.calculator {
+  width: min(100%, 380px);
+  padding: 28px;
+  border: 1px solid rgba(255, 255, 255, .1);
+  border-radius: 28px;
+  background: rgba(28, 33, 48, .94);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, .38);
+}
+
+.calculator__header { margin-bottom: 22px; }
+.calculator__eyebrow { color: #8c96b5; font-size: .78rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; }
+h1 { margin: 5px 0 0; font-size: 1.65rem; }
+
+.display {
+  min-height: 128px;
+  padding: 18px 20px;
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  overflow: hidden;
+  border-radius: 18px;
+  background: #111521;
+}
+.display__previous { min-height: 24px; color: #7f88a2; font-size: .98rem; }
+.display__value { width: 100%; overflow: hidden; color: #f7f9ff; font-size: clamp(2.2rem, 10vw, 3.4rem); font-weight: 600; text-align: right; text-overflow: ellipsis; white-space: nowrap; }
+
+.error { min-height: 20px; margin: 0 4px 10px; color: #ff8d9a; font-size: .82rem; text-align: right; }
+.keypad { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.key { min-height: 62px; padding: 0; border: 0; border-radius: 16px; background: #2b3246; color: #f5f7fb; cursor: pointer; font: inherit; font-size: 1.3rem; font-weight: 600; transition: transform .12s, background .12s; }
+.key:hover { background: #3a435c; }
+.key:active { transform: scale(.95); }
+.key:focus-visible { outline: 3px solid #9caeff; outline-offset: 2px; }
+.key--utility { background: #454e68; color: #cbd3eb; }
+.key--operator { background: #37446f; color: #b8c5ff; }
+.key--operator.is-selected { background: #657eff; color: white; }
+.key--equals { grid-row: span 2; background: #6b7fff; color: white; }
+.key--equals:hover { background: #8091ff; }
+.key--wide { grid-column: span 2; }
+
+@media (max-width: 390px) {
+  .calculator { padding: 20px; }
+  .key { min-height: 58px; }
+}

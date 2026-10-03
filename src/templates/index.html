@@ -13,7 +13,13 @@
       <h1>Калькулятор</h1>
     </header>
 
-    <section id="calculator-display" class="display" aria-live="polite">
+    <nav class="tabs" aria-label="Разделы приложения">
+      <button class="tab is-active" type="button" data-view="calculator-view">Калькулятор</button>
+      <button class="tab" type="button" data-view="history-view">История</button>
+    </nav>
+
+    <section id="calculator-view" class="view">
+      <section id="calculator-display" class="display" aria-live="polite">
       <div id="previous-expression" class="display__previous"></div>
       <div id="display-value" class="display__value">0</div>
     </section>
@@ -43,6 +49,16 @@
 
       <button id="number-0" class="key key--wide" data-number="0" type="button">0</button>
       <button id="decimal-button" class="key" data-action="decimal" type="button">.</button>
+      </section>
+    </section>
+
+    <section id="history-view" class="view history" hidden>
+      <div class="history__header">
+        <h2>История операций</h2>
+        <button id="clear-history" class="history__clear" type="button">Очистить</button>
+      </div>
+      <p id="empty-history" class="history__empty">Операций пока нет</p>
+      <ul id="history-list" class="history__list" aria-live="polite"></ul>
     </section>
   </main>
   <script src="/static/app.js"></script>

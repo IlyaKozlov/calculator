@@ -13,7 +13,7 @@
       <h1>Калькулятор</h1>
     </header>
 
-    <section class="display" aria-live="polite">
+    <section id="calculator-display" class="display" aria-live="polite">
       <div id="previous-expression" class="display__previous"></div>
       <div id="display-value" class="display__value">0</div>
     </section>
@@ -21,28 +21,28 @@
     <div id="error-message" class="error" role="alert" aria-live="assertive"></div>
 
     <section class="keypad" aria-label="Кнопки калькулятора">
-      <button class="key key--utility" data-action="clear" type="button">C</button>
-      <button class="key key--utility" data-action="backspace" type="button" aria-label="Удалить последний символ">⌫</button>
-      <button class="key key--operator" data-operation="/" type="button">÷</button>
-      <button class="key key--operator" data-operation="*" type="button">×</button>
+      <button id="clear-button" class="key key--utility" data-action="clear" type="button">C</button>
+      <button id="backspace-button" class="key key--utility" data-action="backspace" type="button" aria-label="Удалить последний символ">⌫</button>
+      <button id="divide-button" class="key key--operator" data-operation="/" type="button">÷</button>
+      <button id="multiply-button" class="key key--operator" data-operation="*" type="button">×</button>
 
-      <button class="key" data-number="7" type="button">7</button>
-      <button class="key" data-number="8" type="button">8</button>
-      <button class="key" data-number="9" type="button">9</button>
-      <button class="key key--operator" data-operation="-" type="button">−</button>
+      <button id="number-7" class="key" data-number="7" type="button">7</button>
+      <button id="number-8" class="key" data-number="8" type="button">8</button>
+      <button id="number-9" class="key" data-number="9" type="button">9</button>
+      <button id="subtract-button" class="key key--operator" data-operation="-" type="button">−</button>
 
-      <button class="key" data-number="4" type="button">4</button>
-      <button class="key" data-number="5" type="button">5</button>
-      <button class="key" data-number="6" type="button">6</button>
-      <button class="key key--operator" data-operation="+" type="button">+</button>
+      <button id="number-4" class="key" data-number="4" type="button">4</button>
+      <button id="number-5" class="key" data-number="5" type="button">5</button>
+      <button id="number-6" class="key" data-number="6" type="button">6</button>
+      <button id="add-button" class="key key--operator" data-operation="+" type="button">+</button>
 
-      <button class="key" data-number="1" type="button">1</button>
-      <button class="key" data-number="2" type="button">2</button>
-      <button class="key" data-number="3" type="button">3</button>
-      <button class="key key--equals" data-action="equals" type="button">=</button>
+      <button id="number-1" class="key" data-number="1" type="button">1</button>
+      <button id="number-2" class="key" data-number="2" type="button">2</button>
+      <button id="number-3" class="key" data-number="3" type="button">3</button>
+      <button id="equals-button" class="key key--equals" data-action="equals" type="button">=</button>
 
-      <button class="key key--wide" data-number="0" type="button">0</button>
-      <button class="key" data-action="decimal" type="button">.</button>
+      <button id="number-0" class="key key--wide" data-number="0" type="button">0</button>
+      <button id="decimal-button" class="key" data-action="decimal" type="button">.</button>
     </section>
   </main>
   <script src="/static/app.js"></script>

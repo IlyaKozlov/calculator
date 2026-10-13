@@ -1,3 +1,4 @@
+import pytest
 from selenium import webdriver
 
 from selenium.webdriver.support.ui import WebDriverWait
@@ -10,12 +11,19 @@ def test_smoke():
     driver.get('http://localhost:1743')
     pass
 
-def test_add():
-    driver.get('http://localhost:1743')
+
+@pytest.mark.parametrize(
+    ("expression", "expected"),
+   [("3 + 5 =",8),
+    ("9 - 7 =",2),
+    ("5 * 3 =", 15),
+    ("9 / 3 =",3)]
+)
+
+def test_calculator(expression:str, expected:float):
+    driver.get("http://localhost:1743")
     page = MainePage(driver)
-    page.click_two()
-    page.click_add_button()
-    page.click_five()
-    page.click_equals_button()
-    WebDriverWait(driver, 5).until(lambda _: page.read_screen() == 7)
-    assert 7 == page.read_screen()
+    page.click_expression(expression)
+    WebDriverWait(driver, 5).until(lambda _: page.read_screen() == expected)
+    assert expected == page.read_screen()
+

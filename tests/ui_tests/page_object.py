@@ -1,6 +1,7 @@
-from selenium.webdriver.ie.webdriver import WebDriver
+from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.common.by import By
-
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
 class MainePage:
 
@@ -69,25 +70,25 @@ class MainePage:
         element = self._driver.find_element(By.ID, "display-value")
         return float(element.text)
 
-    def click_expression(self, expression:str) -> None:
-        context = {"1":self.click_one,
-                   "2":self.click_two,
-                   "3":self.click_three,
-                   "4":self.click_for,
-                   "5":self.click_five,
-                   "6":self.click_six,
-                   "7":self.click_seven,
-                   "8":self.click_eight,
-                   "9":self.click_nine,
-                   "0":self.click_zero,
-                   "+":self.click_add_button,
-                   "-":self.click_subtract_button,
-                   "*":self.click_multiply_button,
-                   "/":self.click_divide_button,
-                   "=":self.click_equals_button,
-                   ".":self.click_decimal_button,
-                   "c":self.click_clear_button,
-                   "<":self.click_backspace_button,
+    def click_expression(self, expression: str) -> None:
+        context = {"1": self.click_one,
+                   "2": self.click_two,
+                   "3": self.click_three,
+                   "4": self.click_for,
+                   "5": self.click_five,
+                   "6": self.click_six,
+                   "7": self.click_seven,
+                   "8": self.click_eight,
+                   "9": self.click_nine,
+                   "0": self.click_zero,
+                   "+": self.click_add_button,
+                   "-": self.click_subtract_button,
+                   "*": self.click_multiply_button,
+                   "/": self.click_divide_button,
+                   "=": self.click_equals_button,
+                   ".": self.click_decimal_button,
+                   "c": self.click_clear_button,
+                   "<": self.click_backspace_button,
                    }
         for letter in expression:
             if letter.isspace():
@@ -97,3 +98,9 @@ class MainePage:
     def enter_from_keyboard(self, text):
         body = self._driver.find_element(By.TAG_NAME, "body")
         body.send_keys(text)
+
+
+    def open_history(self) -> None:
+        element = self._driver.find_element(By.ID, "history-button")
+        element.click()
+

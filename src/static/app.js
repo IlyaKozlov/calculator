@@ -2,12 +2,15 @@ const displayValue = document.querySelector('#display-value');
 const previousExpression = document.querySelector('#previous-expression');
 const errorMessage = document.querySelector('#error-message');
 const operatorButtons = [...document.querySelectorAll('[data-operation]')];
+const historyList = document.querySelector('#history-list');
+const emptyHistory = document.querySelector('#empty-history');
 
 let currentValue = '';
 let firstValue = null;
 let operation = null;
 let waitingForSecondValue = false;
 let lastExpression = '';
+let historyItems = [];
 
 function render() {
   displayValue.textContent = currentValue || '0';
@@ -23,6 +26,17 @@ function formatNumber(value) {
 
 function showError(message) {
   errorMessage.textContent = message;
+}
+
+function renderHistory() {
+  historyList.replaceChildren();
+  emptyHistory.hidden = historyItems.length > 0;
+  historyItems.forEach(({ expression, result }) => {
+    const item = document.createElement('li');
+    item.className = 'history__item';
+    item.innerHTML = `<span>${expression}</span><strong>${result}</strong>`;
+    historyList.appendChild(item);
+  });
 }
 
 function inputNumber(number) {
@@ -73,6 +87,8 @@ async function calculate(showResult = true) {
     const result = await response.json();
     lastExpression = `${formatNumber(firstValue)} ${operation === '*' ? '×' : operation} ${formatNumber(secondValue)} =`;
     currentValue = formatNumber(result);
+    historyItems.unshift({ expression: lastExpression, result: currentValue });
+    renderHistory();
     firstValue = null;
     operation = null;
     waitingForSecondValue = false;
@@ -101,6 +117,18 @@ document.querySelector('[data-action="backspace"]').addEventListener('click', ()
   if (!waitingForSecondValue) currentValue = currentValue.slice(0, -1);
   render();
 });
+
+document.querySelector('#clear-history').addEventListener('click', () => {
+  historyItems = [];
+  renderHistory();
+});
+
+document.querySelectorAll('[data-view]').forEach((tab) => tab.addEventListener('click', () => {
+  document.querySelectorAll('.view').forEach((view) => {
+    view.hidden = view.id !== tab.dataset.view;
+  });
+  document.querySelectorAll('[data-view]').forEach((item) => item.classList.toggle('is-active', item === tab));
+}));
 
 document.addEventListener('keydown', (event) => {
   if (/^[0-9]$/.test(event.key)) inputNumber(event.key);

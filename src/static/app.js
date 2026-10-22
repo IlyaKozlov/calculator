@@ -28,6 +28,7 @@ function showError(message) {
   errorMessage.textContent = message;
 }
 
+
 function renderHistory() {
   historyList.replaceChildren();
   emptyHistory.hidden = historyItems.length > 0;
@@ -117,6 +118,7 @@ document.querySelector('[data-action="backspace"]').addEventListener('click', ()
   if (!waitingForSecondValue) currentValue = currentValue.slice(0, -1);
   render();
 });
+
 
 document.querySelector('#clear-history').addEventListener('click', () => {
   historyItems = [];

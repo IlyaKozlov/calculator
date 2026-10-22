@@ -42,3 +42,7 @@ def test_calculator_keyboard(expression:str, expected:float):
     WebDriverWait(driver, 5).until(lambda _: page.read_screen() == expected)
     assert expected == page.read_screen()
 
+def test_open_history():
+    driver.get("http://localhost:1743")
+    page = MainePage(driver)
+    page.open_history()

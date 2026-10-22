@@ -27,3 +27,18 @@ def test_calculator(expression:str, expected:float):
     WebDriverWait(driver, 5).until(lambda _: page.read_screen() == expected)
     assert expected == page.read_screen()
 
+
+@pytest.mark.parametrize(
+    ("expression", "expected"),
+   [("3 + 5 =",8),
+    ("9 - 7 =",2),
+    ("5 * 3 =", 15),
+    ("9 / 3 =",3)]
+)
+def test_calculator_keyboard(expression:str, expected:float):
+    driver.get("http://localhost:1743")
+    page = MainePage(driver)
+    page.enter_from_keyboard(expression)
+    WebDriverWait(driver, 5).until(lambda _: page.read_screen() == expected)
+    assert expected == page.read_screen()
+

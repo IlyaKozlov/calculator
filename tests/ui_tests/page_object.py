@@ -93,3 +93,7 @@ class MainePage:
             if letter.isspace():
                 continue
             context[letter]()
+
+    def enter_from_keyboard(self, text):
+        body = self._driver.find_element(By.TAG_NAME, "body")
+        body.send_keys(text)

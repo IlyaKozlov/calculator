@@ -99,7 +99,9 @@ class MainePage:
         body.send_keys(text)
 
 
-    def open_history(self) -> None:
+    def open_history(self) -> "PageHistory":
+        from ui_tests.page_object_history import PageHistory
         element = self._driver.find_element(By.ID, "history-button")
         element.click()
+        return PageHistory(self._driver)
 

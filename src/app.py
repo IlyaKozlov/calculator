@@ -21,33 +21,51 @@ async def read_root():
 
 @app.post("/calculations")
 async def calculate(
-    firstNumber: float = Form(), secondNumber: float = Form(), operation: str = Form()
+    firstNumber: float = Form(),
+    secondNumber: float = Form(),
+    operation: str = Form(),
+    sessionId: str = Form("default"),
 ) -> float:
     db = get_db()
-    db.history_save(
-        first_number=firstNumber, operation=operation, second_number=secondNumber
-    )
-
     calculator = Calculator()
     operation = operation.strip()
     if operation == "+":
-        return calculator.add(firstNumber, secondNumber)
-    if operation == "-":
-        return calculator.subtract(firstNumber, secondNumber)
-    if operation == "*":
-        return calculator.multiply(firstNumber, secondNumber)
-    if operation == "/":
+        result = calculator.add(firstNumber, secondNumber)
+    elif operation == "-":
+        result = calculator.subtract(firstNumber, secondNumber)
+    elif operation == "*":
+        result = calculator.multiply(firstNumber, secondNumber)
+    elif operation == "/":
         try:
-            return calculator.divide(firstNumber, secondNumber)
+            result = calculator.divide(firstNumber, secondNumber)
         except ValueError as e:
             raise HTTPException(status_code=400, detail=str(e))
-    raise HTTPException(status_code=400, detail=f"Invalid operation {operation}")
+    else:
+        raise HTTPException(status_code=400, detail=f"Invalid operation {operation}")
+
+    db.history_save(
+        first_number=firstNumber,
+        operation=operation,
+        second_number=secondNumber,
+        session_id=sessionId,
+    )
+    return result
 
 
 @app.get("/history")
-def get_history(operation: str | None = None) -> list[dict]:
+def get_history(
+    operation: str | None = None, session_id: str | None = None
+) -> list[dict]:
     db = get_db()
-    return db.history_load(operation=operation)
+    return db.history_load(operation=operation, session_id=session_id)
+
+
+@app.delete("/history")
+def clear_history(session_id: str | None = None) -> dict[str, str]:
+    db = get_db()
+    db.history_clear(session_id=session_id)
+    return {"status": "ok"}
+
 
 @app.get("/favicon.ico")
 def get_icon() -> FileResponse:

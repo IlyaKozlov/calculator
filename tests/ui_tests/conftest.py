@@ -7,4 +7,6 @@ from ui_tests.test_ui import driver
 @pytest.fixture
 def open_calculator():
     driver.get("http://localhost:1743")
+    driver.execute_script("window.sessionStorage.clear();")
+    driver.refresh()
     return MainePage(driver)

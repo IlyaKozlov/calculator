@@ -3,8 +3,6 @@ from selenium import webdriver
 
 from selenium.webdriver.support.ui import WebDriverWait
 
-from ui_tests.page_object import MainePage
-
 driver = webdriver.Chrome()
 
 def test_smoke():
@@ -20,12 +18,10 @@ def test_smoke():
     ("9 / 3 =",3)]
 )
 
-def test_calculator(expression:str, expected:float):
-    driver.get("http://localhost:1743")
-    page = MainePage(driver)
-    page.click_expression(expression)
-    WebDriverWait(driver, 5).until(lambda _: page.read_screen() == expected)
-    assert expected == page.read_screen()
+def test_calculator(expression:str, expected:float,open_calculator):
+    open_calculator.click_expression(expression)
+    WebDriverWait(driver, 5).until(lambda _: open_calculator.read_screen() == expected)
+    assert expected == open_calculator.read_screen()
 
 
 @pytest.mark.parametrize(
@@ -35,14 +31,10 @@ def test_calculator(expression:str, expected:float):
     ("5 * 3 =", 15),
     ("9 / 3 =",3)]
 )
-def test_calculator_keyboard(expression:str, expected:float):
-    driver.get("http://localhost:1743")
-    page = MainePage(driver)
-    page.enter_from_keyboard(expression)
-    WebDriverWait(driver, 5).until(lambda _: page.read_screen() == expected)
-    assert expected == page.read_screen()
+def test_calculator_keyboard(expression:str, expected:float,open_calculator):
+    open_calculator.enter_from_keyboard(expression)
+    WebDriverWait(driver, 5).until(lambda _: open_calculator.read_screen() == expected)
+    assert expected == open_calculator.read_screen()
 
-def test_open_history():
-    driver.get("http://localhost:1743")
-    page = MainePage(driver)
-    page.open_history()
+def test_open_history(open_calculator):
+    open_calculator.open_history()

@@ -57,6 +57,16 @@
         <h2>История операций</h2>
         <button id="clear-history" class="history__clear" type="button">Очистить</button>
       </div>
+      <label class="history__filter">
+        Операция
+        <select id="history-operation-filter" aria-label="Фильтр по операции">
+          <option value="">Все операции</option>
+          <option value="+">Сложение (+)</option>
+          <option value="-">Вычитание (−)</option>
+          <option value="*">Умножение (×)</option>
+          <option value="/">Деление (÷)</option>
+        </select>
+      </label>
       <p id="empty-history" class="history__empty">Операций пока нет</p>
       <ul id="history-list" class="history__list" aria-live="polite"></ul>
     </section>

@@ -4,6 +4,7 @@ const errorMessage = document.querySelector('#error-message');
 const operatorButtons = [...document.querySelectorAll('[data-operation]')];
 const historyList = document.querySelector('#history-list');
 const emptyHistory = document.querySelector('#empty-history');
+const historyOperationFilter = document.querySelector('#history-operation-filter');
 
 let currentValue = '';
 let firstValue = null;
@@ -65,7 +66,9 @@ function getHistoryResult(firstNumber, operation, secondNumber) {
 
 async function loadHistory() {
   try {
-    const response = await fetch(`/history?session_id=${encodeURIComponent(sessionId)}`);
+    const params = new URLSearchParams({ session_id: sessionId });
+    if (historyOperationFilter.value) params.set('operation', historyOperationFilter.value);
+    const response = await fetch(`/history?${params}`);
     if (!response.ok) throw new Error('Не удалось загрузить историю');
     const savedItems = await response.json();
 
@@ -75,6 +78,7 @@ async function loadHistory() {
         const result = getHistoryResult(first_number, operation, second_number);
         if (result === null) return null;
         return {
+          operation,
           expression: `${formatNumber(first_number)} ${operation === '*' ? '×' : operation} ${formatNumber(second_number)} =`,
           result: formatNumber(result),
         };
@@ -139,8 +143,10 @@ async function calculate(showResult = true) {
     const result = await response.json();
     lastExpression = `${formatNumber(firstValue)} ${operation === '*' ? '×' : operation} ${formatNumber(secondValue)} =`;
     currentValue = formatNumber(result);
-    historyItems.unshift({ expression: lastExpression, result: currentValue });
-    renderHistory();
+    if (!historyOperationFilter.value || historyOperationFilter.value === operation) {
+      historyItems.unshift({ operation, expression: lastExpression, result: currentValue });
+      renderHistory();
+    }
     firstValue = null;
     operation = null;
     waitingForSecondValue = false;
@@ -170,6 +176,8 @@ document.querySelector('[data-action="backspace"]').addEventListener('click', ()
   render();
 });
 
+
+historyOperationFilter.addEventListener('change', loadHistory);
 
 document.querySelector('#clear-history').addEventListener('click', async () => {
   try {

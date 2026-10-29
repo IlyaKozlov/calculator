@@ -1,5 +1,6 @@
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
 
 
 class PageHistory:
@@ -20,3 +21,7 @@ class PageHistory:
     def click_clean(self) -> None:
         element = self._driver.find_element(By.ID, "clear-history")
         element.click()
+    def wait_for_screen(self, expected: str, timeout: float = 5) -> None:
+        WebDriverWait(self._driver, timeout).until(
+            lambda _: self.read_screen() == expected
+        )

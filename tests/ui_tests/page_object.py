@@ -69,6 +69,10 @@ class MainePage:
         element = self._driver.find_element(By.ID, "display-value")
         return float(element.text)
 
+    def open_filter(self):
+        element = self._driver.find_element(By.ID, "history-operation-filter")
+        element.click()
+
     def click_expression(self, expression: str) -> None:
         context = {"1": self.click_one,
                    "2": self.click_two,

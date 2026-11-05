@@ -4,7 +4,6 @@ from selenium.webdriver.chrome.options import Options
 from ui_tests.page_object import MainePage
 
 
-
 @pytest.fixture
 def main_page():
     driver = make_chrome()

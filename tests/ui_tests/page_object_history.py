@@ -1,5 +1,6 @@
-from selenium.webdriver.remote.webdriver import WebDriver
+from page_object import MainePage
 from selenium.webdriver.common.by import By
+from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support.ui import Select, WebDriverWait
 
 
@@ -8,7 +9,7 @@ class PageHistory:
     def __init__(self, driver: WebDriver):
         self._driver = driver
 
-    def open_calculator(self) -> "MainePage":
+    def open_calculator(self) -> MainePage:
         from ui_tests.page_object import MainePage
         element = self._driver.find_element(By.ID, "calculator-button")
         element.click()

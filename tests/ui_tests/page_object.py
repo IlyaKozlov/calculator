@@ -1,5 +1,5 @@
-from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.remote.webdriver import WebDriver
 
 
 class MainePage:
@@ -103,7 +103,7 @@ class MainePage:
         body.send_keys(text)
 
 
-    def open_history(self) -> "PageHistory":
+    def open_history(self):
         from ui_tests.page_object_history import PageHistory
         element = self._driver.find_element(By.ID, "history-button")
         element.click()

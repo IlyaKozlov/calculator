@@ -1,7 +1,6 @@
 import random
 
 from selenium.webdriver.support.ui import WebDriverWait
-
 from ui_tests.page_object import MainePage
 from ui_tests.page_object_history import PageHistory
 
@@ -27,7 +26,7 @@ def test_filter_for_all_operations(main_page: MainePage):
         main_page.click_clear_button()
         main_page.click_expression(expression)
         WebDriverWait(main_page._driver, 5).until(
-            lambda _: main_page.read_screen() == result
+            lambda _, expected=result: main_page.read_screen() == expected
         )
 
     history_page: PageHistory = main_page.open_history()

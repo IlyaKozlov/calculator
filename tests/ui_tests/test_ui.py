@@ -1,8 +1,5 @@
 import pytest
-from selenium import webdriver
-
 from selenium.webdriver.support.ui import WebDriverWait
-
 
 
 def test_smoke(main_page):

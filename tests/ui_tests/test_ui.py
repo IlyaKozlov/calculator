@@ -11,7 +11,7 @@ def test_smoke(main_page):
 
 @pytest.mark.parametrize(
     ("expression", "expected"),
-   [("3 + 5 =",8),
+   [("3 + 5 =",8,),
     ("9 - 7 =",2),
     ("5 * 3 =", 15),
     ("9 / 3 =",3)]

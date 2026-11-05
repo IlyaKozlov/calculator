@@ -4,6 +4,7 @@ const errorMessage = document.querySelector('#error-message');
 const operatorButtons = [...document.querySelectorAll('[data-operation]')];
 const historyList = document.querySelector('#history-list');
 const emptyHistory = document.querySelector('#empty-history');
+const historyOperationFilter = document.querySelector('#history-operation-filter');
 
 let currentValue = '';
 let firstValue = null;
@@ -11,6 +12,17 @@ let operation = null;
 let waitingForSecondValue = false;
 let lastExpression = '';
 let historyItems = [];
+
+function getSessionId() {
+  let sessionId = sessionStorage.getItem('calculator-session-id');
+  if (!sessionId) {
+    sessionId = crypto.randomUUID();
+    sessionStorage.setItem('calculator-session-id', sessionId);
+  }
+  return sessionId;
+}
+
+const sessionId = getSessionId();
 
 function render() {
   displayValue.textContent = currentValue || '0';
@@ -34,10 +46,48 @@ function renderHistory() {
   emptyHistory.hidden = historyItems.length > 0;
   historyItems.forEach(({ expression, result }) => {
     const item = document.createElement('li');
+    const expressionElement = document.createElement('span');
+    const resultElement = document.createElement('strong');
     item.className = 'history__item';
-    item.innerHTML = `<span>${expression}</span><strong>${result}</strong>`;
+    expressionElement.textContent = expression;
+    resultElement.textContent = result;
+    item.append(expressionElement, resultElement);
     historyList.appendChild(item);
   });
+}
+
+function getHistoryResult(firstNumber, operation, secondNumber) {
+  if (operation === '+') return firstNumber + secondNumber;
+  if (operation === '-') return firstNumber - secondNumber;
+  if (operation === '*') return firstNumber * secondNumber;
+  if (operation === '/' && secondNumber !== 0) return firstNumber / secondNumber;
+  return null;
+}
+
+async function loadHistory() {
+  try {
+    const params = new URLSearchParams({ session_id: sessionId });
+    if (historyOperationFilter.value) params.set('operation', historyOperationFilter.value);
+    const response = await fetch(`/history?${params}`);
+    if (!response.ok) throw new Error('Не удалось загрузить историю');
+    const savedItems = await response.json();
+
+    historyItems = savedItems
+      .reverse()
+      .map(({ first_number, operation, second_number }) => {
+        const result = getHistoryResult(first_number, operation, second_number);
+        if (result === null) return null;
+        return {
+          operation,
+          expression: `${formatNumber(first_number)} ${operation === '*' ? '×' : operation} ${formatNumber(second_number)} =`,
+          result: formatNumber(result),
+        };
+      })
+      .filter(Boolean);
+    renderHistory();
+  } catch (error) {
+    showError(error.message);
+  }
 }
 
 function inputNumber(number) {
@@ -79,7 +129,12 @@ async function calculate(showResult = true) {
     const response = await fetch('/calculations', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({ firstNumber: firstValue, secondNumber: secondValue, operation }),
+      body: new URLSearchParams({
+        firstNumber: firstValue,
+        secondNumber: secondValue,
+        operation,
+        sessionId,
+      }),
     });
     if (!response.ok) {
       const data = await response.json();
@@ -88,8 +143,10 @@ async function calculate(showResult = true) {
     const result = await response.json();
     lastExpression = `${formatNumber(firstValue)} ${operation === '*' ? '×' : operation} ${formatNumber(secondValue)} =`;
     currentValue = formatNumber(result);
-    historyItems.unshift({ expression: lastExpression, result: currentValue });
-    renderHistory();
+    if (!historyOperationFilter.value || historyOperationFilter.value === operation) {
+      historyItems.unshift({ operation, expression: lastExpression, result: currentValue });
+      renderHistory();
+    }
     firstValue = null;
     operation = null;
     waitingForSecondValue = false;
@@ -120,9 +177,19 @@ document.querySelector('[data-action="backspace"]').addEventListener('click', ()
 });
 
 
-document.querySelector('#clear-history').addEventListener('click', () => {
-  historyItems = [];
-  renderHistory();
+historyOperationFilter.addEventListener('change', loadHistory);
+
+document.querySelector('#clear-history').addEventListener('click', async () => {
+  try {
+    const response = await fetch(`/history?session_id=${encodeURIComponent(sessionId)}`, {
+      method: 'DELETE',
+    });
+    if (!response.ok) throw new Error('Не удалось очистить историю');
+    historyItems = [];
+    renderHistory();
+  } catch (error) {
+    showError(error.message);
+  }
 });
 
 document.querySelectorAll('[data-view]').forEach((tab) => tab.addEventListener('click', () => {
@@ -142,3 +209,5 @@ document.addEventListener('keydown', (event) => {
 });
 
 render();
+renderHistory();
+loadHistory();

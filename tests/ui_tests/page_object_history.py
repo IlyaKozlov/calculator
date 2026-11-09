@@ -3,11 +3,13 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support.ui import Select, WebDriverWait
 
+from ui_tests.abc_page import Page
 
-class PageHistory:
+
+class PageHistory(Page):
 
     def __init__(self, driver: WebDriver):
-        self._driver = driver
+        super().__init__(driver)
         WebDriverWait(driver, 5).until(lambda _: len(driver.find_elements(By.ID,"clear-history")) > 0)
 
     def open_calculator(self) -> MainePage:

@@ -61,3 +61,21 @@ def test_clean_history(main_page: MainePage):
 def test_empty_history(main_page: MainePage):
     history_page: PageHistory = main_page.open_history()
     assert history_page.read_screen() == ""
+
+def test_update_page(main_page: MainePage):
+    """
+    step1: make some result in calculator;
+    step2: go to the history page znd check result;
+    step3: update the browse's page;
+    step4: check,the page back to the calculator
+    """
+    add = "2 + 7 = "
+    res ="2 + 7 = 9"
+    main_page.click_expression(add)
+    history_page: PageHistory = main_page.open_history()
+    history_page.wait_for_screen(res)
+    new_main_page = history_page.reload()
+    new_main_page.click_expression("2 + 2 = ")
+
+
+

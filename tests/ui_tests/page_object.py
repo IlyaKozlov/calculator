@@ -1,11 +1,10 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebDriver
 
+from ui_tests.abc_page import Page
 
-class MainePage:
 
-    def __init__(self, driver: WebDriver):
-        self._driver = driver
+class MainePage(Page):
 
     def click_zero(self):
         self._click_button("number-0")

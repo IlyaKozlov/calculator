@@ -58,3 +58,6 @@ def test_clean_history(main_page: MainePage):
     assert history_page.read_screen() == ""
 
 
+def test_empty_history(main_page: MainePage):
+    history_page: PageHistory = main_page.open_history()
+    assert history_page.read_screen() == ""

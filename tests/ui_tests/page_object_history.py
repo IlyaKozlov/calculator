@@ -8,6 +8,7 @@ class PageHistory:
 
     def __init__(self, driver: WebDriver):
         self._driver = driver
+        WebDriverWait(driver, 5).until(lambda _: len(driver.find_elements(By.ID,"clear-history")) > 0)
 
     def open_calculator(self) -> MainePage:
         from ui_tests.page_object import MainePage
